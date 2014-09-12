@@ -24,29 +24,70 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 import java.util.logging.SimpleFormatter;
 
-import org.jibble.pircbot.PircBot;
+import org.pircbotx.Configuration;
+import org.pircbotx.PircBotX;
+import org.pircbotx.exception.IrcException;
 
-public class Cardinal extends PircBot {
+import tk.jacklin213.cardinal.command.CommandManager;
+import tk.jacklin213.cardinal.configuration.ConfigHandler;
+
+public class Cardinal extends PircBotX {
 	
+	public ConfigHandler configHandler = new ConfigHandler(this);
+	public static CommandManager commandManager = new CommandManager();
+	public static boolean logToFile = false;
+	private static Cardinal instance;
 	private static final Logger LOGGER = Logger.getLogger(Cardinal.class.getName());
 	private static final String LOG_PREFIX = "[Cardinal] ";
 	private File dataFolder;
 	String[] channels = {"jacklin213"};
 	
+	public static Cardinal getInstance() {
+		return instance;
+	}
+	
 	private Cardinal() {
-		
+		super(new Configuration.Builder<Cardinal>()
+		.setName("Cardinal") //Set the nick of the bot. CHANGE IN YOUR CODE
+		.setVersion("v1.1")
+		.setNickservPassword("")
+		.setLogin("Cardinal")
+		.setRealName("LinBot")
+		.addListener(new CardinalListener())
+		.addListener(commandManager)
+		.setServerHostname("irc.esper.net") //Join the freenode network
+		.addAutoJoinChannel("#jacklin213") //Join the official #pircbotx channel
+		.addAutoJoinChannel("#cardinal")
+		.addAutoJoinChannel("#drtshock")
+		.buildConfiguration());
 	}
 	
 	public static void main(String[] args) {
 		Cardinal cardinal = new Cardinal();
-		cardinal.setup();
+	    cardinal.setup();
 		SYSO(Level.INFO, "Cardinal is now initializing...");
-		cardinal.connect();
+		cardinal.startConnection();
+		
 		SYSO(Level.INFO, "Initialization complete!");
 	}
 
-	public void connect() {
+	public void startConnection() {
+		SYSO("Connecting to server...");
+		try {
+			this.connect();
+			SYSO("Successfully connected to " + this.getServerInfo().getNetwork());
+		} catch (IOException e) {
+			e.printStackTrace();
+		} catch (IrcException e) {
+			e.printStackTrace();
+		}
 		
+	}
+	
+	public void stopConnection() {
+		SYSO("Disconnecting from server...");
+		SYSO("Disconnect complete");
+		System.exit(0);
 	}
 	
 	public static void SYSO(Level level, String msg) {
@@ -61,7 +102,8 @@ public class Cardinal extends PircBot {
 		dataFolder = new File(System.getProperty("user.dir"));
 		// Setup logging to file
 		FileHandler fh; 
-		try {	
+		try {
+			LOGGER.setUseParentHandlers(false);
 			fh = new FileHandler(getDataFolder().getAbsolutePath() + "/cardinal.log");
 			LOGGER.addHandler(fh);
 			SimpleFormatter formatter = new SimpleFormatter();  
@@ -75,4 +117,5 @@ public class Cardinal extends PircBot {
 	public File getDataFolder() {
 		return this.dataFolder;
 	}
+	
 }
