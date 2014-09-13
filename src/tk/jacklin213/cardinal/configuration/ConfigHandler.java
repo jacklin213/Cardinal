@@ -17,17 +17,29 @@
  */
 package tk.jacklin213.cardinal.configuration;
 
+import java.io.File;
+import java.util.HashMap;
+import java.util.Map;
+
 import tk.jacklin213.cardinal.Cardinal;
+import tk.jacklin213.cardinal.configuration.utils.ConfigType;
+import tk.jacklin213.cardinal.configuration.utils.YamlConfig;
+
 
 public class ConfigHandler {
 	
-	private Cardinal bot;
+	private Map<ConfigType, YamlConfig> configs = new HashMap<ConfigType, YamlConfig>();
 	
 	public ConfigHandler(Cardinal instance) {
-		this.bot = instance;
+//		this.registerConfig(ConfigType.SYSTEM, new SystemConfig().createConfig());
 	}
 	
-	public void setSystemConfig() {
+	public void registerConfig(ConfigType type, YamlConfig config) {
+		configs.put(type, config);
+	}
+	
+	public void reloadConfig(ConfigType type, File configFile) {
+		configs.put(type, YamlConfig.loadConfiguration(configFile));
 	}
 	
 }

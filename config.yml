@@ -1,0 +1,10 @@
+Nick: Test
+NickServ:
+  Enabled: true
+  PasswordProtected: false
+  Login: LinLogin
+  Password: change
+Server: irc.esper.net
+AutoJoinChannels:
+- jacklin213
+- cardinal

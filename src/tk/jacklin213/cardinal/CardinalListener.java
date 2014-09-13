@@ -19,14 +19,31 @@ package tk.jacklin213.cardinal;
 
 import org.pircbotx.hooks.ListenerAdapter;
 import org.pircbotx.hooks.events.JoinEvent;
+import org.pircbotx.hooks.types.GenericMessageEvent;
 
 public class CardinalListener extends ListenerAdapter<Cardinal> {
 	
 	//private static final String CMD_PREFIX = "!";
+	private int counter = 0;
 	
 	@Override
 	public void onJoin(JoinEvent<Cardinal> event) throws Exception {
-		event.getChannel().send().message("System initiated. Ready to work");
+		if (event.getUser().getBot().getBotId() == event.getBot().getBotId()) {
+			event.getChannel().send().message("System initiated. Ready to work");
+		}
+	}
+	
+	@Override
+	public void onGenericMessage(GenericMessageEvent<Cardinal> event) throws Exception {
+		for (String string : event.getMessage().split(" ")) {
+			if (string.equalsIgnoreCase("eta")) {
+				counter += 1;
+				event.respond("There is NO ETA for the Sponge project or SpongeAPI as a whole. Every time you ask, the project gets moved back an hour. Please do not.");
+				if (counter % 5 == 0 || counter == 1) {
+					event.respond("Current ETA count number: " + counter);
+				}
+			}
+		}
 	}
 	
 //	@Override
