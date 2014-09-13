@@ -38,6 +38,7 @@ public class CommandManager extends ListenerAdapter<Cardinal> {
 	}
 	
 	private void registerCommands() {
+		registerCommand(new CmdJoin());
 		registerCommand(new CmdList());
 		registerCommand(new CmdLog());
 		registerCommand(new CmdShutdown());

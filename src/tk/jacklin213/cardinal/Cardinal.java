@@ -41,7 +41,6 @@ public class Cardinal extends PircBotX {
 	private static final Logger LOGGER = Logger.getLogger(Cardinal.class.getName());
 	private static final String LOG_PREFIX = "[Cardinal] ";
 	private static File dataFolder;
-	String[] channels = {"jacklin213"};
 	
 	public static Cardinal getInstance() {
 		return instance;
@@ -59,7 +58,7 @@ public class Cardinal extends PircBotX {
 		config.printlnConfig();
 		Configuration.Builder<Cardinal> builder = new Configuration.Builder<Cardinal>()
 		.setName(config.getString("Nick")) //Set the nick of the bot. CHANGE IN YOUR CODE
-		.setVersion("v1.1.1")
+		.setVersion("v1.1.2")
 		.setRealName("LinBot")
 		.addListener(new CardinalListener())
 		.addListener(commandManager)

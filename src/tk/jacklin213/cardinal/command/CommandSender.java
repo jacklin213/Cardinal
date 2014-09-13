@@ -46,6 +46,7 @@ public class CommandSender {
 		this.name = user.getNick();
 		this.channel = channel;
 		this.user = user;
+		this.bot = bot;
 		this.op = channel.isOp(user);
 	}
 	
